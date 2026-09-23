@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Standard — Grade-1 Deadbolt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300;1,400;1,600;1,700;1,800;1,900&family=JetBrains+Mono:wght@300;400;500&display=swap">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --w:      #FFFFFF;
+  --k:      #0A0A0A;
+  --k2:     #111111;
+  --orange: #FF4F00;
+  --mid:    #666666;
+  --light:  #BBBBBB;
+  --rule:   #E8E8E8;
+  --font:   'Barlow Condensed', system-ui, sans-serif;
+  --mono:   'JetBrains Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--w);
+  color: var(--k);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--rule);
+}
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--k);
+  text-decoration: none;
+}
+.nav-links {
+  display: flex; align-items: center; gap: 40px;
+}
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mid);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.nav-links a:hover { color: var(--k); }
+.nav-cta {
+  display: flex; align-items: center; gap: 32px;
+}
+.btn-buy {
+  display: inline-flex; align-items: center;
+  height: 38px; padding: 0 22px;
+  background: var(--orange); color: #fff;
+  font-family: var(--mono); font-size: 11px;
+  font-weight: 500; letter-spacing: 0.14em;
+  text-transform: uppercase; text-decoration: none;
+  transition: opacity 0.15s;
+}
+.btn-buy:hover { opacity: 0.85; }
+.btn-ghost {
+  display: inline-flex; align-items: center;
+  height: 38px; padding: 0 22px;
+  border: 1px solid var(--k); color: var(--k);
+  font-family: var(--mono); font-size: 11px;
+  font-weight: 400; letter-spacing: 0.14em;
+  text-transform: uppercase; text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+.btn-ghost:hover { background: var(--k); color: #fff; }
+
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding-top: 60px;
+}
+.hero-text {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 80px 64px 80px 64px;
+  border-right: 1px solid var(--rule);
+}
+.hero-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 32px;
+  display: flex; align-items: center; gap: 12px;
+}
+.hero-label::before {
+  content: '';
+  display: block; width: 24px; height: 1px;
+  background: var(--orange);
+}
+.hero-headline {
+  font-size: clamp(72px, 8vw, 112px);
+  font-weight: 900;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+}
+.hero-headline em {
+  font-style: italic;
+  color: var(--mid);
+}
+.hero-sub {
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--mid);
+  max-width: 400px;
+  margin-bottom: 56px;
+}
+.hero-actions {
+  display: flex; gap: 16px; align-items: center;
+}
+.hero-price {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--mid);
+  letter-spacing: 0.06em;
+  margin-top: 48px;
+  padding-top: 48px;
+  border-top: 1px solid var(--rule);
+}
+.hero-price strong {
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--k);
+}
+.hero-photo {
+  position: relative;
+  background: #F8F8F8;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.hero-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.hero-corner {
+  position: absolute;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--light);
+  text-transform: uppercase;
+}
+.hero-corner--tl { top: 24px; left: 24px; }
+.hero-corner--br { bottom: 24px; right: 24px; text-align: right; }
+.corner-mark {
+  position: absolute;
+  width: 20px; height: 20px;
+}
+.corner-mark::before, .corner-mark::after {
+  content: ''; position: absolute; background: var(--light);
+}
+.corner-mark::before { width: 1px; height: 100%; left: 0; }
+.corner-mark::after  { height: 1px; width: 100%; top: 0; left: 0; }
+.corner-mark--tl { top: 24px; left: 24px; }
+.corner-mark--tr { top: 24px; right: 24px; transform: rotate(90deg); }
+.corner-mark--bl { bottom: 24px; left: 24px; transform: rotate(270deg); }
+.corner-mark--br { bottom: 24px; right: 24px; transform: rotate(180deg); }
+
+.spec-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--k);
+}
+.spec-item {
+  padding: 56px 48px;
+  border-right: 1px solid #222;
+  display: flex; flex-direction: column;
+}
+.spec-item:last-child { border-right: none; }
+.spec-number {
+  font-size: 72px;
+  font-weight: 900;
+  line-height: 1;
+  color: #fff;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.spec-number sup {
+  font-size: 32px;
+  vertical-align: super;
+  font-weight: 700;
+}
+.spec-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #555;
+  line-height: 1.5;
+}
+
+.product-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 80vh;
+}
+.product-photo {
+  background: #F2F2F2;
+  position: relative;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  border-right: 1px solid var(--rule);
+}
+.product-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.product-info {
+  padding: 80px 72px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.section-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 24px;
+  display: flex; align-items: center; gap: 12px;
+}
+.section-eyebrow::before {
+  content: '';
+  display: block; width: 24px; height: 1px;
+  background: var(--orange);
+}
+.section-title {
+  font-size: 64px;
+  font-weight: 900;
+  line-height: 0.94;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin-bottom: 32px;
+}
+.section-body {
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--mid);
+  max-width: 440px;
+  margin-bottom: 48px;
+}
+.spec-list {
+  list-style: none;
+  border-top: 1px solid var(--rule);
+}
+.spec-list li {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--rule);
+  gap: 24px;
+}
+.spec-list .spec-key {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mid);
+  white-space: nowrap;
+}
+.spec-list .spec-val {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--k);
+  text-align: right;
+}
+
+.how-section {
+  padding: 120px 64px;
+  border-top: 1px solid var(--rule);
+}
+.how-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 80px;
+  gap: 48px;
+}
+.how-header .section-title { margin-bottom: 0; }
+.how-header p {
+  font-size: 19px;
+  color: var(--mid);
+  line-height: 1.55;
+  max-width: 400px;
+  flex-shrink: 0;
+}
+.how-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+.how-step {
+  padding: 48px 48px 48px 0;
+  border-right: 1px solid var(--rule);
+  padding-right: 48px;
+}
+.how-step:last-child { border-right: none; padding-right: 0; }
+.how-step:not(:first-child) { padding-left: 48px; }
+.step-num {
+  font-size: 96px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--rule);
+  letter-spacing: -0.04em;
+  margin-bottom: 24px;
+  display: block;
+}
+.step-title {
+  font-size: 36px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin-bottom: 16px;
+}
+.step-body {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--mid);
+}
+
+.photo-break {
+  height: 560px;
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  background: #F0F0F0;
+}
+.photo-break img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+}
+.photo-break-caption {
+  position: absolute;
+  bottom: 40px; left: 64px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(10,10,10,0.4);
+}
+
+.features-section { padding: 0; }
+.features-header {
+  padding: 80px 64px 64px;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  border-bottom: 1px solid var(--rule);
+  gap: 48px;
+}
+.features-header .section-title { margin-bottom: 0; }
+.features-header p {
+  font-size: 19px;
+  color: var(--mid);
+  max-width: 380px;
+  line-height: 1.55;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.feature-card {
+  padding: 56px 48px;
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.feature-card:nth-child(3n) { border-right: none; }
+.feature-card:nth-last-child(-n+3) { border-bottom: none; }
+.feature-code {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--orange);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.feature-title {
+  font-size: 32px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+.feature-body {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--mid);
+}
+
+.testimonials-section {
+  padding: 120px 64px;
+  border-top: 1px solid var(--rule);
+  background: #FAFAFA;
+}
+.testimonials-header { margin-bottom: 64px; }
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+.testimonial {
+  padding: 0 48px 0 0;
+  border-right: 1px solid var(--rule);
+}
+.testimonial:last-child { border-right: none; padding-right: 0; }
+.testimonial:not(:first-child) { padding-left: 48px; }
+.testimonial-quote {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 24px;
+  color: var(--k);
+}
+.testimonial-quote::before { content: '\201C'; }
+.testimonial-quote::after  { content: '\201D'; }
+.testimonial-attr {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mid);
+}
+.testimonial-stars {
+  color: var(--orange);
+  font-size: 14px;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+}
+
+.product-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--rule);
+  height: 480px;
+}
+.product-pair .pane {
+  position: relative;
+  overflow: hidden;
+  background: #F4F4F4;
+}
+.product-pair .pane:first-child { border-right: 1px solid var(--rule); }
+.product-pair .pane img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.pane-label {
+  position: absolute;
+  bottom: 24px; left: 28px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mid);
+}
+
+.cta-section {
+  background: var(--k);
+  padding: 120px 64px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.cta-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 24px;
+  display: flex; align-items: center; gap: 12px;
+}
+.cta-label::before {
+  content: '';
+  display: block; width: 24px; height: 1px;
+  background: var(--orange);
+}
+.cta-headline {
+  font-size: clamp(56px, 6vw, 88px);
+  font-weight: 900;
+  line-height: 0.92;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin-bottom: 32px;
+}
+.cta-sub {
+  font-size: 19px;
+  color: #555;
+  line-height: 1.55;
+  max-width: 440px;
+}
+.cta-buy {
+  display: flex; flex-direction: column; justify-content: center;
+  align-items: flex-start;
+  gap: 32px;
+  padding-left: 80px;
+  border-left: 1px solid #222;
+}
+.cta-price-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #444;
+  margin-bottom: 8px;
+}
+.cta-price {
+  font-size: 80px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.cta-price-sub {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: #444;
+  margin-top: 8px;
+  letter-spacing: 0.08em;
+}
+.cta-actions {
+  display: flex; flex-direction: column; gap: 12px; width: 100%;
+}
+.cta-btn-primary {
+  display: flex; align-items: center; justify-content: center;
+  height: 56px; padding: 0 40px;
+  background: var(--orange); color: #fff;
+  font-family: var(--mono); font-size: 13px;
+  font-weight: 500; letter-spacing: 0.14em;
+  text-transform: uppercase; text-decoration: none;
+  transition: opacity 0.15s;
+  width: 100%;
+}
+.cta-btn-primary:hover { opacity: 0.85; }
+.cta-btn-secondary {
+  display: flex; align-items: center; justify-content: center;
+  height: 56px; padding: 0 40px;
+  background: transparent; color: #555;
+  border: 1px solid #333;
+  font-family: var(--mono); font-size: 13px;
+  font-weight: 400; letter-spacing: 0.14em;
+  text-transform: uppercase; text-decoration: none;
+  transition: color 0.15s, border-color 0.15s;
+  width: 100%;
+}
+.cta-btn-secondary:hover { color: #fff; border-color: #666; }
+.guarantee {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #444;
+  line-height: 1.8;
+}
+
+footer {
+  background: #0A0A0A;
+  border-top: 1px solid #1a1a1a;
+  padding: 64px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+}
+.footer-logo {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 16px;
+  display: block;
+}
+.footer-tagline {
+  font-size: 15px;
+  color: #444;
+  line-height: 1.6;
+  max-width: 240px;
+}
+.footer-col-title {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #555;
+  margin-bottom: 20px;
+}
+.footer-col ul {
+  list-style: none;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.footer-col a {
+  font-size: 15px;
+  color: #555;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.footer-col a:hover { color: #fff; }
+.footer-bottom {
+  background: #0A0A0A;
+  border-top: 1px solid #1a1a1a;
+  padding: 24px 64px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-copy {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #333;
+}
+.footer-badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">STANDARD</a>
+  <div class="nav-links">
+    <a href="#product">Product</a>
+    <a href="#specs">Specs</a>
+    <a href="#install">Install</a>
+    <a href="#reviews">Reviews</a>
+  </div>
+  <div class="nav-cta">
+    <a class="btn-ghost" href="#specs">View Specs</a>
+    <a class="btn-buy" href="#buy">$129 — Buy Now</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-label">Grade-1 Residential Security</div>
+    <h1 class="hero-headline">
+      THE LOCK<br>
+      <em>RE-</em><br>
+      DESIGNED.
+    </h1>
+    <p class="hero-sub">
+      Machined from 6061-T6 aluminium. ANSI Grade 1 rated. Installs in 15 minutes with no special tools.
+    </p>
+    <div class="hero-actions">
+      <a class="btn-buy" href="#buy">Order Now — $129</a>
+      <a class="btn-ghost" href="#product">Learn More</a>
+    </div>
+    <div class="hero-price">
+      Free shipping · <strong>$129</strong> · 2-year warranty
+    </div>
+  </div>
+  <div class="hero-photo">
+    <img src="https://cdn.midjourney.com/ca058aed-f860-42a3-a5b0-ffd555c1db52/0_0.jpeg" alt="Standard deadbolt">
+    <div class="corner-mark corner-mark--tl"></div>
+    <div class="corner-mark corner-mark--tr"></div>
+    <div class="corner-mark corner-mark--bl"></div>
+    <div class="corner-mark corner-mark--br"></div>
+    <div class="hero-corner hero-corner--tl">MODEL SL-01</div>
+    <div class="hero-corner hero-corner--br">ANSI GRADE 1</div>
+  </div>
+</section>
+
+<section class="spec-bar" id="specs">
+  <div class="spec-item">
+    <div class="spec-number">1<sup>st</sup></div>
+    <div class="spec-label">ANSI Grade<br>Security Rating</div>
+  </div>
+  <div class="spec-item">
+    <div class="spec-number">15<sup>min</sup></div>
+    <div class="spec-label">Average<br>Install Time</div>
+  </div>
+  <div class="spec-item">
+    <div class="spec-number">1<sup>"</sup></div>
+    <div class="spec-label">Solid Steel<br>Throw Length</div>
+  </div>
+  <div class="spec-item">
+    <div class="spec-number">2<sup>yr</sup></div>
+    <div class="spec-label">Full Coverage<br>Warranty</div>
+  </div>
+</section>
+
+<section class="product-section" id="product">
+  <div class="product-photo">
+    <img src="https://cdn.midjourney.com/ca058aed-f860-42a3-a5b0-ffd555c1db52/0_1.jpeg" alt="Standard deadbolt brushed nickel">
+    <div class="corner-mark corner-mark--tl"></div>
+    <div class="corner-mark corner-mark--br"></div>
+  </div>
+  <div class="product-info">
+    <div class="section-eyebrow">Precision Engineering</div>
+    <h2 class="section-title">BUILT<br>DIFFER-<br>ENT.</h2>
+    <p class="section-body">
+      Every component machined to tolerance. No plastic. No compromise. The internals are hardened steel; the cylinder is pick-resistant. The exterior is 6061-T6 aluminium bead-blasted and anodised.
+    </p>
+    <ul class="spec-list">
+      <li><span class="spec-key">Material</span><span class="spec-val">6061-T6 Aluminium + Hardened Steel</span></li>
+      <li><span class="spec-key">Security Grade</span><span class="spec-val">ANSI/BHMA Grade 1</span></li>
+      <li><span class="spec-key">Bolt Projection</span><span class="spec-val">1 inch solid steel</span></li>
+      <li><span class="spec-key">Door Thickness</span><span class="spec-val">1-3/8" to 2-1/4"</span></li>
+      <li><span class="spec-key">Finish</span><span class="spec-val">Matte White / Brushed Nickel</span></li>
+      <li><span class="spec-key">Keys Included</span><span class="spec-val">3 precision-cut keys</span></li>
+      <li><span class="spec-key">Certifications</span><span class="spec-val">UL Listed · ANSI A156.30</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="how-section" id="install">
+  <div class="how-header">
+    <div>
+      <div class="section-eyebrow">Simple Installation</div>
+      <h2 class="section-title">THREE<br>STEPS.</h2>
+    </div>
+    <p>No locksmith needed. No special tools. Remove your old deadbolt, fit the Standard, tighten four screws. Done.</p>
+  </div>
+  <div class="how-grid">
+    <div class="how-step">
+      <span class="step-num">01</span>
+      <h3 class="step-title">Remove Old Lock</h3>
+      <p class="step-body">Unscrew your existing deadbolt — four screws total. Takes about 4 minutes. Works on 99% of standard US door prep.</p>
+    </div>
+    <div class="how-step">
+      <span class="step-num">02</span>
+      <h3 class="step-title">Fit The Standard</h3>
+      <p class="step-body">Drop the bolt assembly into the latch hole. Feed the connecting bar through and align the rose plates on both sides of the door.</p>
+    </div>
+    <div class="how-step">
+      <span class="step-num">03</span>
+      <h3 class="step-title">Tighten and Test</h3>
+      <p class="step-body">Four screws. Test the throw. Check the key turns smoothly. Done — you have about 9 minutes to spare.</p>
+    </div>
+  </div>
+</section>
+
+<div class="photo-break">
+  <img src="https://cdn.midjourney.com/ca058aed-f860-42a3-a5b0-ffd555c1db52/0_3.jpeg" alt="Standard detail">
+  <span class="photo-break-caption">STANDARD SL-01 · BRUSHED NICKEL</span>
+</div>
+
+<section class="features-section">
+  <div class="features-header">
+    <div>
+      <div class="section-eyebrow">What's Inside</div>
+      <h2 class="section-title">THE<br>DETAILS.</h2>
+    </div>
+    <p>Every feature exists for a reason. Nothing is ornamental. Every gram is accounted for.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-code">F-01</div>
+      <h3 class="feature-title">Anti-Pick Cylinder</h3>
+      <p class="feature-body">6-pin cylinder with security pins resists standard picking and bumping attacks. ANSI Grade 1 pick resistance certified.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-code">F-02</div>
+      <h3 class="feature-title">Hardened Steel Bolt</h3>
+      <p class="feature-body">1-inch solid hardened steel throw with anti-saw pin. Resists kick-in, sawing, and brute force. No plastic inside.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-code">F-03</div>
+      <h3 class="feature-title">Anodised Aluminium</h3>
+      <p class="feature-body">6061-T6 billet aluminium housing. Hard-anodised finish resists corrosion, fading, and scratching. Looks the same in 10 years.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-code">F-04</div>
+      <h3 class="feature-title">Reinforced Strike</h3>
+      <p class="feature-body">3-inch security strike with 3-inch wood screws included. The weakest point of any door is the frame — we fixed that.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-code">F-05</div>
+      <h3 class="feature-title">Universal Backset</h3>
+      <p class="feature-body">Adjustable 2-3/8" or 2-3/4" backset. Fits virtually every door in the US without modification.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-code">F-06</div>
+      <h3 class="feature-title">2-Year Warranty</h3>
+      <p class="feature-body">If anything goes wrong in two years, we replace it. No questions. No receipts. No hassle.</p>
+    </div>
+  </div>
+</section>
+
+<div class="product-pair">
+  <div class="pane">
+    <img src="https://cdn.midjourney.com/ca058aed-f860-42a3-a5b0-ffd555c1db52/0_0.jpeg" alt="Matte White">
+    <span class="pane-label">Matte White</span>
+  </div>
+  <div class="pane">
+    <img src="https://cdn.midjourney.com/ca058aed-f860-42a3-a5b0-ffd555c1db52/0_2.jpeg" alt="Brushed Nickel">
+    <span class="pane-label">Brushed Nickel</span>
+  </div>
+</div>
+
+<section class="testimonials-section" id="reviews">
+  <div class="testimonials-header">
+    <div class="section-eyebrow">Customer Reviews</div>
+    <h2 class="section-title" style="font-size:56px;">WHAT<br>THEY SAY.</h2>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-quote">Installed in 12 minutes. Looks incredible. My neighbors asked what it was. The quality is leagues above anything at the hardware store.</p>
+      <div class="testimonial-attr">James M. · Chicago, IL</div>
+    </div>
+    <div class="testimonial">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-quote">I'm a locksmith. This is what I put on my own home. The cylinder quality and throw mechanism are genuinely impressive for the price.</p>
+      <div class="testimonial-attr">Sarah K. · Licensed Locksmith · Austin, TX</div>
+    </div>
+    <div class="testimonial">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-quote">Replaced all four exterior locks in under an hour. Instructions were perfect. The keys feel machined, not stamped. Night and day difference.</p>
+      <div class="testimonial-attr">R. Tanaka · Seattle, WA</div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section" id="buy">
+  <div class="cta-text">
+    <div class="cta-label">Ready to Upgrade</div>
+    <h2 class="cta-headline">SECURE<br>YOUR<br>DOOR.</h2>
+    <p class="cta-sub">Grade-1 security. 15-minute install. Free shipping on every order. Two-year full replacement warranty.</p>
+  </div>
+  <div class="cta-buy">
+    <div>
+      <div class="cta-price-label">Standard SL-01</div>
+      <div class="cta-price">$129</div>
+      <div class="cta-price-sub">Free shipping · Ships in 2–3 days</div>
+    </div>
+    <div class="cta-actions">
+      <a class="cta-btn-primary" href="#">Order Now</a>
+      <a class="cta-btn-secondary" href="#">View Full Specs</a>
+    </div>
+    <div class="guarantee">
+      ✓ 30-day returns &nbsp;&nbsp; ✓ 2-year warranty<br>
+      ✓ Free shipping &nbsp;&nbsp;&nbsp;&nbsp; ✓ Secure checkout
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand">
+    <span class="footer-logo">Standard</span>
+    <p class="footer-tagline">Precision-engineered residential security hardware. Made to last.</p>
+  </div>
+  <div class="footer-col">
+    <div class="footer-col-title">Product</div>
+    <ul>
+      <li><a href="#">SL-01 Deadbolt</a></li>
+      <li><a href="#">Tech Specs</a></li>
+      <li><a href="#">Installation</a></li>
+      <li><a href="#">Warranty</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <div class="footer-col-title">Support</div>
+    <ul>
+      <li><a href="#">FAQ</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><a href="#">Returns</a></li>
+      <li><a href="#">Dealers</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <div class="footer-col-title">Company</div>
+    <ul>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Press</a></li>
+      <li><a href="#">Privacy</a></li>
+      <li><a href="#">Terms</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <span class="footer-copy">© 2026 Standard Hardware Co. All rights reserved.</span>
+  <span class="footer-badge">ANSI GRADE 1 CERTIFIED</span>
+</div>
+
+</body>
+</html>
